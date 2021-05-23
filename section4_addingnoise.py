@@ -16,7 +16,7 @@ def g(x):
 def behaviour_model(
     time,
     dt = 0.01,
-    b1 = 0.8, b2 = 0.8,
+    b1 = 0.5, b2 = 0.5,
     w_ee = 3.0,
     alpha = 1., sigma = .5
     ):
@@ -51,7 +51,7 @@ def behaviour_model(
         np.sqrt(dt)*sigma*np.random.normal()
     return h
 
-def plot_results(h, time, ax = None):
+def plot_results(h, time, ax = None, title = None):
     """ Plot the population dynamics. 
     
     Parameters
@@ -66,18 +66,30 @@ def plot_results(h, time, ax = None):
 
     ax.plot(time, h[0][:], label='first population')
     ax.plot(time, h[1][:], label='second population')
-    ax.set_title('Time evolution of parameters')
+    if title is None:
+        ax.set_title('Time evolution of parameters')
+    else:
+        ax.set_title(title)
+    ax.set_xlabel('Time (s)')
+    ax.set_ylabel('Membrane potential (mV)')
     plt.legend()
 
 def main():
     """Main."""
     duration = 10
     dt = 0.01
-    h = behaviour_model(duration)
+    h = behaviour_model(duration, dt)
     fig, ax = plt.subplots(figsize = (10,6))
-    plot_results(h, np.arange(0, duration, dt), ax=ax)
-    ax.set_xlabel('Time (s)')
-    ax.set_ylabel('Membrane potential (mV)')
+    title = 'Time evolution of parameters with dt=0.01'
+    plot_results(h, np.arange(0, duration, dt), ax=ax, title=title)
+    plt.show()
+
+    duration = 10
+    dt = 0.001
+    h = behaviour_model(duration, dt)
+    fig, ax = plt.subplots(figsize = (10,6))
+    title = 'Time evolution of parameters with dt=0.001'
+    plot_results(h, np.arange(0, duration, dt), ax=ax, title=title)
     plt.show()
 
 
